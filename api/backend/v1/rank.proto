@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package kob_kratos.v1;
+
+option go_package = "kob-kratos/api/backend/v1;v1";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+// 排行榜服务
+service RankService {
+  rpc GetRankList(GetRankListRequest) returns (GetRankListResponse) {
+    option (google.api.http) = {
+      get: "/api/rank/getlist"
+    };
+  }
+}
+
+// 排行榜相关消息定义
+message GetRankListRequest {
+  string page = 1 [(validate.rules).string.min_len = 1, json_name = "page"];
+}
+
+message GetRankListResponse {
+  repeated RankUser users = 1 [json_name = "users"];
+  int64 user_count = 2 [json_name = "user_count"];
+}
+
+message RankUser {
+  int32 id = 1 [(validate.rules).int32.gt = 0, json_name = "id"];
+  string photo = 2 [json_name = "photo"];
+  string username = 3 [json_name = "username"];
+  int32 rating = 4 [json_name = "rating"];
+  int32 number = 5 [json_name = "number"];
+}

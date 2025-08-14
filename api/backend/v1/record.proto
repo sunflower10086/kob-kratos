@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package kob_kratos.v1;
+
+option go_package = "kob-kratos/api/backend/v1;v1";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+// 记录服务
+service RecordService {
+  rpc GetRecordList(GetRecordListRequest) returns (GetRecordListResponse) {
+    option (google.api.http) = {
+      get: "/api/record/getlist"
+    };
+  }
+}
+
+// 记录相关消息定义
+message GetRecordListRequest {
+  string page = 1 [(validate.rules).string.min_len = 1, json_name = "page"];
+}
+
+message GetRecordListResponse {
+  repeated Record records = 1 [json_name = "records"];
+  int64 records_count = 2 [json_name = "records_count"];
+}
+
+message Record {
+  string a_photo = 1 [json_name = "a_photo"];
+  string a_username = 2 [json_name = "a_username"];
+  string b_photo = 3 [json_name = "b_photo"];
+  string b_username = 4 [json_name = "b_username"];
+  string result = 5 [json_name = "result"];
+  GameRecord record = 6 [json_name = "record"];
+}
+
+message GameRecord {
+  int32 id = 1 [(validate.rules).int32.gt = 0, json_name = "id"];
+  int32 a_id = 2 [(validate.rules).int32.gt = 0, json_name = "a_id"];
+  int32 a_sx = 3 [json_name = "a_sx"];
+  int32 a_sy = 4 [json_name = "a_sy"];
+  int32 b_id = 5 [(validate.rules).int32.gt = 0, json_name = "b_id"];
+  int32 b_sx = 6 [json_name = "b_sx"];
+  int32 b_sy = 7 [json_name = "b_sy"];
+  string a_steps = 8 [json_name = "a_steps"];
+  string b_steps = 9 [json_name = "b_steps"];
+  string map = 10 [json_name = "map"];
+  string loser = 11 [json_name = "loser"];
+  string create_time = 12 [json_name = "create_time"];
+}

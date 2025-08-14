@@ -1,0 +1,166 @@
+package biz
+
+import (
+	"context"
+
+	v1 "kob-kratos/api/backend/v1"
+
+	"github.com/go-kratos/kratos/v2/log"
+)
+
+// User 用户实体
+type User struct {
+	ID       int32  `json:"id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Photo    string `json:"photo"`
+	Rating   int32  `json:"rating"`
+}
+
+// UserRepository 用户仓储接口
+type UserRepository interface {
+	// Register 用户注册
+	Register(ctx context.Context, user *User) error
+	// Login 用户登录
+	Login(ctx context.Context, username, password string) (*User, error)
+	// GetUserInfo 获取用户信息
+	GetUserInfo(ctx context.Context, userID int32) (*User, error)
+	// GetUserByUsername 根据用户名获取用户
+	GetUserByUsername(ctx context.Context, username string) (*User, error)
+	// UpdateUser 更新用户信息
+	UpdateUser(ctx context.Context, user *User) error
+	// CheckUserExists 检查用户是否存在
+	CheckUserExists(ctx context.Context, username string) (bool, error)
+}
+
+// UserUsecase 用户用例
+type UserUsecase struct {
+	repo UserRepository
+	log  *log.Helper
+}
+
+// NewUserUsecase 创建用户用例
+func NewUserUsecase(logger log.Logger) *UserUsecase {
+	return &UserUsecase{
+		// repo: repo,
+		log: log.NewHelper(logger),
+	}
+}
+
+// Register 用户注册
+func (uc *UserUsecase) Register(ctx context.Context, req *v1.RegisterRequest) (*v1.RegisterResponse, error) {
+	// // 验证密码确认
+	// if req.Password != req.ConfirmedPassword {
+	// 	uc.log.Error("密码和确认密码不匹配")
+	// 	return &v1.RegisterResponse{
+	// 		Message: "密码和确认密码不匹配",
+	// 	}, nil
+	// }
+
+	// // 检查用户是否已存在
+	// exists, err := uc.repo.CheckUserExists(ctx, req.Username)
+	// if err != nil {
+	// 	uc.log.Errorf("检查用户是否存在失败: %v", err)
+	// 	return nil, err
+	// }
+	// if exists {
+	// 	return &v1.RegisterResponse{
+	// 		Message: "用户名已存在",
+	// 	}, nil
+	// }
+
+	// // 创建用户
+	// user := &User{
+	// 	Username: req.Username,
+	// 	Password: req.Password, // 实际项目中应该加密密码
+	// 	Photo:    "",           // 默认头像
+	// 	Rating:   1500,         // 默认评分
+	// }
+
+	// err = uc.repo.Register(ctx, user)
+	// if err != nil {
+	// 	uc.log.Errorf("用户注册失败: %v", err)
+	// 	return nil, err
+	// }
+
+	// return &v1.RegisterResponse{
+	// 	Message: "注册成功",
+	// }, nil
+	panic("implement me")
+}
+
+// Login 用户登录
+func (uc *UserUsecase) Login(ctx context.Context, req *v1.LoginRequest) (*v1.LoginResponse, error) {
+	// user, err := uc.repo.Login(ctx, req.Username, req.Password)
+	// if err != nil {
+	// 	uc.log.Errorf("用户登录失败: %v", err)
+	// 	return nil, err
+	// }
+
+	// if user == nil {
+	// 	return &v1.LoginResponse{
+	// 		Token: "",
+	// 	}, nil
+	// }
+
+	// // 生成JWT token（这里简化处理）
+	// token := generateJWTToken(user.ID, user.Username)
+
+	// return &v1.LoginResponse{
+	// 	Token: token,
+	// }, nil
+	panic("implement me")
+}
+
+// GetUserInfo 获取用户信息
+func (uc *UserUsecase) GetUserInfo(ctx context.Context, req *v1.GetUserInfoRequest) (*v1.GetUserInfoResponse, error) {
+	// userID := parseStringToInt32(req.UserId)
+	// user, err := uc.repo.GetUserInfo(ctx, userID)
+	// if err != nil {
+	// 	uc.log.Errorf("获取用户信息失败: %v", err)
+	// 	return nil, err
+	// }
+
+	// if user == nil {
+	// 	return &v1.GetUserInfoResponse{
+	// 		Message: "用户不存在",
+	// 	}, nil
+	// }
+
+	// return &v1.GetUserInfoResponse{
+	// 	Message:  "获取成功",
+	// 	UserId:   user.ID,
+	// 	Username: user.Username,
+	// 	Photo:    user.Photo,
+	// }, nil
+	panic("implement me")
+}
+
+// GetUserByUsername 根据用户名获取用户
+func (uc *UserUsecase) GetUserByUsername(ctx context.Context, username string) (*User, error) {
+	// user, err := uc.repo.GetUserByUsername(ctx, username)
+	// if err != nil {
+	// 	uc.log.Errorf("根据用户名获取用户失败: %v", err)
+	// 	return nil, err
+	// }
+	// return user, nil
+	panic("implement me")
+}
+
+// UpdateUser 更新用户信息
+func (uc *UserUsecase) UpdateUser(ctx context.Context, user *User) error {
+	// err := uc.repo.UpdateUser(ctx, user)
+	// if err != nil {
+	// 	uc.log.Errorf("更新用户信息失败: %v", err)
+	// 	return err
+	// }
+	// return nil
+	panic("implement me")
+}
+
+// generateJWTToken 生成JWT token（简化实现）
+func generateJWTToken(userID int32, username string) string {
+	// 这里应该使用真正的JWT库来生成token
+	// 简化示例，实际项目中需要使用jwt-go等库
+	return "jwt_token_placeholder"
+}

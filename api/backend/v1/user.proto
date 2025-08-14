@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package kob_kratos.v1;
+
+option go_package = "kob-kratos/api/backend/v1;v1";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+// 用户服务
+service UserService {
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/api/user/account/register"
+      body: "*"
+    };
+  }
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/api/user/account/token"
+      body: "*"
+    };
+  }
+  rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse) {
+    option (google.api.http) = {
+      get: "/api/user/account/info"
+    };
+  }
+}
+
+// 用户相关消息定义
+message RegisterRequest {
+  string username = 1 [(validate.rules).string.min_len = 1, json_name = "username"];
+  string password = 2 [(validate.rules).string.min_len = 1, json_name = "password"];
+  string confirmed_password = 3 [(validate.rules).string.min_len = 1, json_name = "confirmed_password"];
+}
+
+message RegisterResponse {
+  string message = 1 [json_name = "message"];
+}
+
+message LoginRequest {
+  string username = 1 [(validate.rules).string.min_len = 1, json_name = "username"];
+  string password = 2 [(validate.rules).string.min_len = 1, json_name = "password"];
+}
+
+message LoginResponse {
+  string token = 1 [json_name = "token"];
+}
+
+message GetUserInfoRequest {
+  string user_id = 1 [json_name = "user_id"];
+}
+
+message GetUserInfoResponse {
+  string message = 1 [json_name = "message"];
+  int32 user_id = 2 [(validate.rules).int32.gt = 0, json_name = "user_id"];
+  string username = 3 [json_name = "username"];
+  string photo = 4 [json_name = "photo"];
+}

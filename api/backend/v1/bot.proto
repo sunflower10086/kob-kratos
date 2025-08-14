@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package kob_kratos.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";  // 导入 validate 库
+
+option go_package = "kob-kratos/api/backend/v1;v1";
+
+// 机器人服务
+service BotService {
+  rpc AddBot(AddBotRequest) returns (AddBotResponse) {
+    option (google.api.http) = {
+      post: "/api/user/bot/add"
+      body: "*"
+    };
+  }
+  rpc GetBotList(GetBotListRequest) returns (GetBotListResponse) {
+    option (google.api.http) = {
+      get: "/api/user/bot/getlist"
+    };
+  }
+  rpc UpdateBot(UpdateBotRequest) returns (UpdateBotResponse) {
+    option (google.api.http) = {
+      post: "/api/user/bot/update"
+      body: "*"
+    };
+  }
+  rpc DeleteBot(DeleteBotRequest) returns (DeleteBotResponse) {
+    option (google.api.http) = {
+      post: "/api/user/bot/remove"
+      body: "*"
+    };
+  }
+}
+
+// 机器人相关消息定义
+message AddBotRequest {
+  string title = 1 [(validate.rules).string.min_len = 1, json_name = "title"];
+  string code = 2 [(validate.rules).string.min_len = 1, json_name = "code"];
+  string description = 3 [(validate.rules).string.min_len = 1, json_name = "description"];
+  int32 user_id = 4 [(validate.rules).int32.gt = 0, json_name = "user_id"];
+}
+
+message AddBotResponse {
+  string message = 1 [json_name = "message"];
+}
+
+message GetBotListRequest {
+  string user_id = 1 [(validate.rules).string.min_len = 1, json_name = "user_id"];
+}
+
+message GetBotListResponse {
+  repeated Bot bot_list = 1 [json_name = "botList"];
+}
+
+message Bot {
+  int32 id = 1 [(validate.rules).int32.gt = 0, json_name = "id"];
+  int32 user_id = 2 [(validate.rules).int32.gt = 0, json_name = "user_id"];
+  string title = 3 [json_name = "title"];
+  string description = 4 [json_name = "description"];
+  string code = 5 [json_name = "code"];
+  string create_time = 6 [json_name = "create_time"];
+  string modify_time = 7 [json_name = "modify_time"];
+}
+
+message UpdateBotRequest {
+  string user_id = 1 [json_name = "user_id"];
+  string bot_id = 2 [(validate.rules).string.min_len = 1, json_name = "bot_id"];
+  string title = 3 [(validate.rules).string.min_len = 1, json_name = "title"];
+  string code = 4 [(validate.rules).string.min_len = 1, json_name = "code"];
+  string description = 5 [(validate.rules).string.min_len = 1, json_name = "description"];
+}
+
+message UpdateBotResponse {
+  string message = 1 [json_name = "message"];
+}
+
+message DeleteBotRequest {
+  int32 user_id = 1 [(validate.rules).int32.gt = 0, json_name = "user_id"];
+  string bot_id = 2 [(validate.rules).string.min_len = 1, json_name = "bot_id"];
+}
+
+message DeleteBotResponse {
+  string message = 1 [json_name = "message"];
+}

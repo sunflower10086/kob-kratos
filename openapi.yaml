@@ -1,0 +1,374 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ""
+    version: 0.0.1
+paths:
+    /api/rank/getlist:
+        get:
+            tags:
+                - RankService
+            operationId: RankService_GetRankList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/kob_kratos.v1.GetRankListResponse'
+    /api/record/getlist:
+        get:
+            tags:
+                - RecordService
+            operationId: RecordService_GetRecordList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/kob_kratos.v1.GetRecordListResponse'
+    /api/user/account/info:
+        get:
+            tags:
+                - UserService
+            operationId: UserService_GetUserInfo
+            parameters:
+                - name: user_id
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/kob_kratos.v1.GetUserInfoResponse'
+    /api/user/account/register:
+        post:
+            tags:
+                - UserService
+            operationId: UserService_Register
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/kob_kratos.v1.RegisterRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/kob_kratos.v1.RegisterResponse'
+    /api/user/account/token:
+        post:
+            tags:
+                - UserService
+            operationId: UserService_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/kob_kratos.v1.LoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/kob_kratos.v1.LoginResponse'
+    /api/user/bot/add:
+        post:
+            tags:
+                - BotService
+            operationId: BotService_AddBot
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/kob_kratos.v1.AddBotRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/kob_kratos.v1.AddBotResponse'
+    /api/user/bot/getlist:
+        get:
+            tags:
+                - BotService
+            operationId: BotService_GetBotList
+            parameters:
+                - name: user_id
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/kob_kratos.v1.GetBotListResponse'
+    /api/user/bot/remove:
+        post:
+            tags:
+                - BotService
+            operationId: BotService_DeleteBot
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/kob_kratos.v1.DeleteBotRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/kob_kratos.v1.DeleteBotResponse'
+    /api/user/bot/update:
+        post:
+            tags:
+                - BotService
+            operationId: BotService_UpdateBot
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/kob_kratos.v1.UpdateBotRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/kob_kratos.v1.UpdateBotResponse'
+components:
+    schemas:
+        kob_kratos.v1.AddBotRequest:
+            type: object
+            properties:
+                title:
+                    type: string
+                code:
+                    type: string
+                description:
+                    type: string
+                user_id:
+                    type: integer
+                    format: int32
+            description: 机器人相关消息定义
+        kob_kratos.v1.AddBotResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+        kob_kratos.v1.Bot:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                user_id:
+                    type: integer
+                    format: int32
+                title:
+                    type: string
+                description:
+                    type: string
+                code:
+                    type: string
+                create_time:
+                    type: string
+                modify_time:
+                    type: string
+        kob_kratos.v1.DeleteBotRequest:
+            type: object
+            properties:
+                user_id:
+                    type: integer
+                    format: int32
+                bot_id:
+                    type: string
+        kob_kratos.v1.DeleteBotResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+        kob_kratos.v1.GameRecord:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                a_id:
+                    type: integer
+                    format: int32
+                a_sx:
+                    type: integer
+                    format: int32
+                a_sy:
+                    type: integer
+                    format: int32
+                b_id:
+                    type: integer
+                    format: int32
+                b_sx:
+                    type: integer
+                    format: int32
+                b_sy:
+                    type: integer
+                    format: int32
+                a_steps:
+                    type: string
+                b_steps:
+                    type: string
+                map:
+                    type: string
+                loser:
+                    type: string
+                create_time:
+                    type: string
+        kob_kratos.v1.GetBotListResponse:
+            type: object
+            properties:
+                botList:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/kob_kratos.v1.Bot'
+        kob_kratos.v1.GetRankListResponse:
+            type: object
+            properties:
+                users:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/kob_kratos.v1.RankUser'
+                user_count:
+                    type: string
+        kob_kratos.v1.GetRecordListResponse:
+            type: object
+            properties:
+                records:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/kob_kratos.v1.Record'
+                records_count:
+                    type: string
+        kob_kratos.v1.GetUserInfoResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+                user_id:
+                    type: integer
+                    format: int32
+                username:
+                    type: string
+                photo:
+                    type: string
+        kob_kratos.v1.LoginRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+                password:
+                    type: string
+        kob_kratos.v1.LoginResponse:
+            type: object
+            properties:
+                token:
+                    type: string
+        kob_kratos.v1.RankUser:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                photo:
+                    type: string
+                username:
+                    type: string
+                rating:
+                    type: integer
+                    format: int32
+                number:
+                    type: integer
+                    format: int32
+        kob_kratos.v1.Record:
+            type: object
+            properties:
+                a_photo:
+                    type: string
+                a_username:
+                    type: string
+                b_photo:
+                    type: string
+                b_username:
+                    type: string
+                result:
+                    type: string
+                record:
+                    $ref: '#/components/schemas/kob_kratos.v1.GameRecord'
+        kob_kratos.v1.RegisterRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+                password:
+                    type: string
+                confirmed_password:
+                    type: string
+            description: 用户相关消息定义
+        kob_kratos.v1.RegisterResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+        kob_kratos.v1.UpdateBotRequest:
+            type: object
+            properties:
+                user_id:
+                    type: string
+                bot_id:
+                    type: string
+                title:
+                    type: string
+                code:
+                    type: string
+                description:
+                    type: string
+        kob_kratos.v1.UpdateBotResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+tags:
+    - name: BotService
+      description: 机器人服务
+    - name: RankService
+      description: 排行榜服务
+    - name: RecordService
+      description: 记录服务
+    - name: UserService
+      description: 用户服务

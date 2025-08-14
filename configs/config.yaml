@@ -1,0 +1,88 @@
+server:
+  # 开发模式: dev|test|rt|pre|pro
+  Mode: dev
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 10s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 10s
+  health_check:
+    addr: 0.0.0.0:6070
+    timeout: 1s
+data:
+  database:
+    dsn: host=120.27.237.120 user=sunflower password=lz18738377974 dbname=blog port=5432 sslmode=disable TimeZone=Asia/Shanghai
+    log_mode: true
+    max_open_cons: 10
+    max_idle_cons: 10
+    create_batch_size: 100
+  redis:
+    addr: 127.0.0.1:6379
+    read_timeout: 0.2s
+    write_timeout: 0.2s
+
+mq:
+  kafka:
+    producers:
+      endpoint:
+        - 120.27.237.120:9092
+      items:
+        page_view:
+          topic: blog.page_views
+          retries: 3
+        like_action:
+          topic: blog.like_events
+          retries: 5  # 点赞需更高重试次数确保成功
+
+    consumers:
+      endpoint:
+        - 120.27.237.120:9092
+      items:
+        page_view_consumer:
+          topics:
+            - blog.page_views
+          groupId: blog-page-view-group
+          concurrency: 6  # 高并发处理浏览量
+        like_event_consumer:
+          topics:
+            - blog.like_events
+          groupId: blog-like-event-group
+          concurrency: 3
+
+log:
+  ServiceName: sunflower-blog-svc-blog
+  # 日志记录模式 console,file,volume, 默认 console
+  #   console：将日志输出到控制台。
+  #   file：将日志输出到文件。
+  #   volume：在 Kubernetes 环境中使用，将主机名添加到日志文件名中
+  Mode: console
+  # 输出格式 json, plain, 默认 json
+  #   json：使用 JSON 编码。
+  #   plain：使用纯文本编码，通常在开发过程中使用。
+  Encoding: plain
+  # 日志文件路径
+  Path: ../../logs/
+  # 日志级别 debug,info,error,severe, 默认 info
+  Level: info
+  # 是否压缩
+  Compress: true
+  # 是否记录统计信息，默认为 true
+  Stat: false
+  # 日志文件保留天数。默认保留所有文件。只在 Mode 为 file 或 volume 时生效，且当 Rotation 为 daily 或 size 时同时生效
+  KeepDays: 7
+  # 堆栈日志记录的冷却时间，默认为 100ms
+  StackCoolDownMillis: 100
+  # MaxBackups 表示在删除旧的备份日志文件之前，保存多少个备份日志文件。设置为 0 将永久保留所有文件。
+  # 这个参数只在 RotationRuleType 设置为 size 时生效。即使 MaxBackups 设置为0，当达到 KeepDays 限制时，日志文件仍然会被删除
+  MaxBackups: 7
+  # 表示当前正在写入的日志文件所能占用的最大空间。设置为 0 表示没有限制。单位是 MB（兆字节）。这个参数只在 Rotation 设置为 size 时生效,如果达到保留期限 KeepDays，则会删除旧文件
+  MaxSize: 100
+  # 日志轮换规则类型，默认为 daily。
+  #   daily：每天轮换。
+  #   size：按大小限制轮换。
+  Rotation: size
+
+jwt:
+  AccessSecret: sunflower-blog
+  AccessExpire: 604800
