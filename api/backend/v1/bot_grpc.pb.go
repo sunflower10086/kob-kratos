@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -31,10 +32,10 @@ const (
 //
 // 机器人服务
 type BotServiceClient interface {
-	AddBot(ctx context.Context, in *AddBotRequest, opts ...grpc.CallOption) (*AddBotResponse, error)
+	AddBot(ctx context.Context, in *AddBotRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetBotList(ctx context.Context, in *GetBotListRequest, opts ...grpc.CallOption) (*GetBotListResponse, error)
-	UpdateBot(ctx context.Context, in *UpdateBotRequest, opts ...grpc.CallOption) (*UpdateBotResponse, error)
-	DeleteBot(ctx context.Context, in *DeleteBotRequest, opts ...grpc.CallOption) (*DeleteBotResponse, error)
+	UpdateBot(ctx context.Context, in *UpdateBotRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteBot(ctx context.Context, in *DeleteBotRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type botServiceClient struct {
@@ -45,9 +46,9 @@ func NewBotServiceClient(cc grpc.ClientConnInterface) BotServiceClient {
 	return &botServiceClient{cc}
 }
 
-func (c *botServiceClient) AddBot(ctx context.Context, in *AddBotRequest, opts ...grpc.CallOption) (*AddBotResponse, error) {
+func (c *botServiceClient) AddBot(ctx context.Context, in *AddBotRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddBotResponse)
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, BotService_AddBot_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -65,9 +66,9 @@ func (c *botServiceClient) GetBotList(ctx context.Context, in *GetBotListRequest
 	return out, nil
 }
 
-func (c *botServiceClient) UpdateBot(ctx context.Context, in *UpdateBotRequest, opts ...grpc.CallOption) (*UpdateBotResponse, error) {
+func (c *botServiceClient) UpdateBot(ctx context.Context, in *UpdateBotRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateBotResponse)
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, BotService_UpdateBot_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -75,9 +76,9 @@ func (c *botServiceClient) UpdateBot(ctx context.Context, in *UpdateBotRequest, 
 	return out, nil
 }
 
-func (c *botServiceClient) DeleteBot(ctx context.Context, in *DeleteBotRequest, opts ...grpc.CallOption) (*DeleteBotResponse, error) {
+func (c *botServiceClient) DeleteBot(ctx context.Context, in *DeleteBotRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeleteBotResponse)
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, BotService_DeleteBot_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -91,10 +92,10 @@ func (c *botServiceClient) DeleteBot(ctx context.Context, in *DeleteBotRequest, 
 //
 // 机器人服务
 type BotServiceServer interface {
-	AddBot(context.Context, *AddBotRequest) (*AddBotResponse, error)
+	AddBot(context.Context, *AddBotRequest) (*emptypb.Empty, error)
 	GetBotList(context.Context, *GetBotListRequest) (*GetBotListResponse, error)
-	UpdateBot(context.Context, *UpdateBotRequest) (*UpdateBotResponse, error)
-	DeleteBot(context.Context, *DeleteBotRequest) (*DeleteBotResponse, error)
+	UpdateBot(context.Context, *UpdateBotRequest) (*emptypb.Empty, error)
+	DeleteBot(context.Context, *DeleteBotRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedBotServiceServer()
 }
 
@@ -105,16 +106,16 @@ type BotServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedBotServiceServer struct{}
 
-func (UnimplementedBotServiceServer) AddBot(context.Context, *AddBotRequest) (*AddBotResponse, error) {
+func (UnimplementedBotServiceServer) AddBot(context.Context, *AddBotRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddBot not implemented")
 }
 func (UnimplementedBotServiceServer) GetBotList(context.Context, *GetBotListRequest) (*GetBotListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBotList not implemented")
 }
-func (UnimplementedBotServiceServer) UpdateBot(context.Context, *UpdateBotRequest) (*UpdateBotResponse, error) {
+func (UnimplementedBotServiceServer) UpdateBot(context.Context, *UpdateBotRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateBot not implemented")
 }
-func (UnimplementedBotServiceServer) DeleteBot(context.Context, *DeleteBotRequest) (*DeleteBotResponse, error) {
+func (UnimplementedBotServiceServer) DeleteBot(context.Context, *DeleteBotRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteBot not implemented")
 }
 func (UnimplementedBotServiceServer) mustEmbedUnimplementedBotServiceServer() {}

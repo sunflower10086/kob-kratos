@@ -18,12 +18,15 @@ service RankService {
 
 // 排行榜相关消息定义
 message GetRankListRequest {
-  string page = 1 [(validate.rules).string.min_len = 1, json_name = "page"];
+  int32 page = 1 [(validate.rules).int32.gt = 0, json_name = "page"];
+  int32 page_size = 2 [(validate.rules).int32.gt = 0, json_name = "page_size"];
 }
 
 message GetRankListResponse {
-  repeated RankUser users = 1 [json_name = "users"];
-  int64 user_count = 2 [json_name = "user_count"];
+  int32 page = 1 [json_name = "page"];
+  int32 page_size = 2 [json_name = "page_size"];
+  repeated RankUser users = 3 [json_name = "users"];
+  int64 total = 4 [json_name = "total"];
 }
 
 message RankUser {

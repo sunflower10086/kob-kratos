@@ -4,6 +4,7 @@ import (
 	"context"
 
 	v1 "kob-kratos/api/backend/v1"
+	"kob-kratos/internal/data/gormgen/query"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
@@ -37,13 +38,14 @@ type Record struct {
 // RecordRepository 记录仓储接口
 type RecordRepository interface {
 	// GetRecordList 获取记录列表
-	GetRecordList(ctx context.Context, page int32) ([]*Record, int64, error)
+	GetRecordList(ctx context.Context, page, pageSize int32) ([]*Record, int64, error)
 	// CreateRecord 创建游戏记录
-	CreateRecord(ctx context.Context, record *GameRecord) error
+	CreateRecord(ctx context.Context, tx *query.Query, record *GameRecord) error
 	// GetRecordByID 根据ID获取记录
 	GetRecordByID(ctx context.Context, recordID int32) (*Record, error)
 	// GetUserRecords 获取用户的游戏记录
-	GetUserRecords(ctx context.Context, userID int32, page int32) ([]*Record, int64, error)
+	GetUserRecords(ctx context.Context, userID int32, page, pageSize int32) ([]*Record, int64, error)
+	Transaction(ctx context.Context, fn func(tx *query.Query) error) error
 }
 
 // RecordUsecase 记录用例

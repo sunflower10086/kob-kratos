@@ -10,6 +10,7 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -25,10 +26,10 @@ const OperationBotServiceGetBotList = "/kob_kratos.v1.BotService/GetBotList"
 const OperationBotServiceUpdateBot = "/kob_kratos.v1.BotService/UpdateBot"
 
 type BotServiceHTTPServer interface {
-	AddBot(context.Context, *AddBotRequest) (*AddBotResponse, error)
-	DeleteBot(context.Context, *DeleteBotRequest) (*DeleteBotResponse, error)
+	AddBot(context.Context, *AddBotRequest) (*emptypb.Empty, error)
+	DeleteBot(context.Context, *DeleteBotRequest) (*emptypb.Empty, error)
 	GetBotList(context.Context, *GetBotListRequest) (*GetBotListResponse, error)
-	UpdateBot(context.Context, *UpdateBotRequest) (*UpdateBotResponse, error)
+	UpdateBot(context.Context, *UpdateBotRequest) (*emptypb.Empty, error)
 }
 
 func RegisterBotServiceHTTPServer(s *http.Server, srv BotServiceHTTPServer) {
@@ -56,7 +57,7 @@ func _BotService_AddBot0_HTTP_Handler(srv BotServiceHTTPServer) func(ctx http.Co
 		if err != nil {
 			return err
 		}
-		reply := out.(*AddBotResponse)
+		reply := out.(*emptypb.Empty)
 		return ctx.Result(200, reply)
 	}
 }
@@ -97,7 +98,7 @@ func _BotService_UpdateBot0_HTTP_Handler(srv BotServiceHTTPServer) func(ctx http
 		if err != nil {
 			return err
 		}
-		reply := out.(*UpdateBotResponse)
+		reply := out.(*emptypb.Empty)
 		return ctx.Result(200, reply)
 	}
 }
@@ -119,16 +120,16 @@ func _BotService_DeleteBot0_HTTP_Handler(srv BotServiceHTTPServer) func(ctx http
 		if err != nil {
 			return err
 		}
-		reply := out.(*DeleteBotResponse)
+		reply := out.(*emptypb.Empty)
 		return ctx.Result(200, reply)
 	}
 }
 
 type BotServiceHTTPClient interface {
-	AddBot(ctx context.Context, req *AddBotRequest, opts ...http.CallOption) (rsp *AddBotResponse, err error)
-	DeleteBot(ctx context.Context, req *DeleteBotRequest, opts ...http.CallOption) (rsp *DeleteBotResponse, err error)
+	AddBot(ctx context.Context, req *AddBotRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
+	DeleteBot(ctx context.Context, req *DeleteBotRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	GetBotList(ctx context.Context, req *GetBotListRequest, opts ...http.CallOption) (rsp *GetBotListResponse, err error)
-	UpdateBot(ctx context.Context, req *UpdateBotRequest, opts ...http.CallOption) (rsp *UpdateBotResponse, err error)
+	UpdateBot(ctx context.Context, req *UpdateBotRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 }
 
 type BotServiceHTTPClientImpl struct {
@@ -139,8 +140,8 @@ func NewBotServiceHTTPClient(client *http.Client) BotServiceHTTPClient {
 	return &BotServiceHTTPClientImpl{client}
 }
 
-func (c *BotServiceHTTPClientImpl) AddBot(ctx context.Context, in *AddBotRequest, opts ...http.CallOption) (*AddBotResponse, error) {
-	var out AddBotResponse
+func (c *BotServiceHTTPClientImpl) AddBot(ctx context.Context, in *AddBotRequest, opts ...http.CallOption) (*emptypb.Empty, error) {
+	var out emptypb.Empty
 	pattern := "/api/user/bot/add"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationBotServiceAddBot))
@@ -152,8 +153,8 @@ func (c *BotServiceHTTPClientImpl) AddBot(ctx context.Context, in *AddBotRequest
 	return &out, nil
 }
 
-func (c *BotServiceHTTPClientImpl) DeleteBot(ctx context.Context, in *DeleteBotRequest, opts ...http.CallOption) (*DeleteBotResponse, error) {
-	var out DeleteBotResponse
+func (c *BotServiceHTTPClientImpl) DeleteBot(ctx context.Context, in *DeleteBotRequest, opts ...http.CallOption) (*emptypb.Empty, error) {
+	var out emptypb.Empty
 	pattern := "/api/user/bot/remove"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationBotServiceDeleteBot))
@@ -178,8 +179,8 @@ func (c *BotServiceHTTPClientImpl) GetBotList(ctx context.Context, in *GetBotLis
 	return &out, nil
 }
 
-func (c *BotServiceHTTPClientImpl) UpdateBot(ctx context.Context, in *UpdateBotRequest, opts ...http.CallOption) (*UpdateBotResponse, error) {
-	var out UpdateBotResponse
+func (c *BotServiceHTTPClientImpl) UpdateBot(ctx context.Context, in *UpdateBotRequest, opts ...http.CallOption) (*emptypb.Empty, error) {
+	var out emptypb.Empty
 	pattern := "/api/user/bot/update"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationBotServiceUpdateBot))

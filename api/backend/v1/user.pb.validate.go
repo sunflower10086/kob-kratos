@@ -619,8 +619,6 @@ func (m *GetUserInfoResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Message
-
 	if m.GetUserId() <= 0 {
 		err := GetUserInfoResponseValidationError{
 			field:  "UserId",

@@ -12,7 +12,7 @@ server:
     timeout: 1s
 data:
   database:
-    dsn: host=120.27.237.120 user=sunflower password=lz18738377974 dbname=blog port=5432 sslmode=disable TimeZone=Asia/Shanghai
+    dsn: host=127.0.0.1 user=sunflower password=lz18738377974 dbname=kob port=5432 sslmode=disable TimeZone=Asia/Shanghai
     log_mode: true
     max_open_cons: 10
     max_idle_cons: 10

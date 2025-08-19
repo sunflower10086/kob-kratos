@@ -4,6 +4,7 @@ import (
 	"context"
 
 	v1 "kob-kratos/api/backend/v1"
+	"kob-kratos/internal/data/gormgen/query"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
@@ -20,11 +21,12 @@ type RankUser struct {
 // RankRepository 排行榜仓储接口
 type RankRepository interface {
 	// GetRankList 获取排行榜列表
-	GetRankList(ctx context.Context, page int32) ([]*RankUser, int64, error)
+	GetRankList(ctx context.Context, page, pageSize int32) ([]*RankUser, int64, error)
 	// GetUserRank 获取用户排名
 	GetUserRank(ctx context.Context, userID int32) (*RankUser, error)
 	// UpdateUserRating 更新用户评分
-	UpdateUserRating(ctx context.Context, userID int32, rating int32) error
+	UpdateUserRating(ctx context.Context, tx *query.Query, userID int32, rating int32) error
+	Transaction(ctx context.Context, fn func(tx *query.Query) error) error
 }
 
 // RankUsecase 排行榜用例

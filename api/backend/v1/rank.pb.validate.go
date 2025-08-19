@@ -57,10 +57,21 @@ func (m *GetRankListRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetPage()) < 1 {
+	if m.GetPage() <= 0 {
 		err := GetRankListRequestValidationError{
 			field:  "Page",
-			reason: "value length must be at least 1 runes",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetPageSize() <= 0 {
+		err := GetRankListRequestValidationError{
+			field:  "PageSize",
+			reason: "value must be greater than 0",
 		}
 		if !all {
 			return err
@@ -170,6 +181,10 @@ func (m *GetRankListResponse) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Page
+
+	// no validation rules for PageSize
+
 	for idx, item := range m.GetUsers() {
 		_, _ = idx, item
 
@@ -204,7 +219,7 @@ func (m *GetRankListResponse) validate(all bool) error {
 
 	}
 
-	// no validation rules for UserCount
+	// no validation rules for Total
 
 	if len(errors) > 0 {
 		return GetRankListResponseMultiError(errors)

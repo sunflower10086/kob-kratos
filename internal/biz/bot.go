@@ -4,6 +4,7 @@ import (
 	"context"
 
 	v1 "kob-kratos/api/backend/v1"
+	"kob-kratos/internal/data/gormgen/query"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
@@ -21,16 +22,12 @@ type Bot struct {
 
 // BotRepository 机器人仓储接口
 type BotRepository interface {
-	// AddBot 添加机器人
-	AddBot(ctx context.Context, bot *Bot) error
-	// GetBotList 获取机器人列表
-	GetBotList(ctx context.Context, userID int32) ([]*Bot, error)
-	// UpdateBot 更新机器人
-	UpdateBot(ctx context.Context, bot *Bot) error
-	// DeleteBot 删除机器人
-	DeleteBot(ctx context.Context, userID int32, botID string) error
-	// GetBotByID 根据ID获取机器人
+	Insert(ctx context.Context, tx *query.Query, bot *Bot) error
+	Update(ctx context.Context, tx *query.Query, bot *Bot) error
+	DeleteBot(ctx context.Context, tx *query.Query, botID int32) error
+	GetBotList(ctx context.Context, page, pageSize int32, userID int32) ([]*Bot, int64, error)
 	GetBotByID(ctx context.Context, botID int32) (*Bot, error)
+	Transaction(ctx context.Context, fn func(tx *query.Query) error) error
 }
 
 // BotUsecase 机器人用例
@@ -48,7 +45,7 @@ func NewBotUsecase(logger log.Logger) *BotUsecase {
 }
 
 // AddBot 添加机器人
-func (uc *BotUsecase) AddBot(ctx context.Context, req *v1.AddBotRequest) (*v1.AddBotResponse, error) {
+func (uc *BotUsecase) AddBot(ctx context.Context, req *v1.AddBotRequest) error {
 	// bot := &Bot{
 	// 	UserID:      req.UserId,
 	// 	Title:       req.Title,
@@ -97,7 +94,7 @@ func (uc *BotUsecase) GetBotList(ctx context.Context, req *v1.GetBotListRequest)
 }
 
 // UpdateBot 更新机器人
-func (uc *BotUsecase) UpdateBot(ctx context.Context, req *v1.UpdateBotRequest) (*v1.UpdateBotResponse, error) {
+func (uc *BotUsecase) UpdateBot(ctx context.Context, req *v1.UpdateBotRequest) error {
 	// botID := parseStringToInt32(req.BotId)
 	// bot := &Bot{
 	// 	ID:          botID,
@@ -120,7 +117,7 @@ func (uc *BotUsecase) UpdateBot(ctx context.Context, req *v1.UpdateBotRequest) (
 }
 
 // DeleteBot 删除机器人
-func (uc *BotUsecase) DeleteBot(ctx context.Context, req *v1.DeleteBotRequest) (*v1.DeleteBotResponse, error) {
+func (uc *BotUsecase) DeleteBot(ctx context.Context, req *v1.DeleteBotRequest) error {
 	// err := uc.repo.DeleteBot(ctx, req.UserId, req.BotId)
 	// if err != nil {
 	// 	uc.log.Errorf("删除机器人失败: %v", err)

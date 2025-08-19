@@ -18,12 +18,15 @@ service RecordService {
 
 // 记录相关消息定义
 message GetRecordListRequest {
-  string page = 1 [(validate.rules).string.min_len = 1, json_name = "page"];
+  int32 page = 1 [(validate.rules).int32.gt = 0, json_name = "page"];
+  int32 page_size = 2 [(validate.rules).int32.gt = 0, json_name = "page_size"];
 }
 
 message GetRecordListResponse {
-  repeated Record records = 1 [json_name = "records"];
-  int64 records_count = 2 [json_name = "records_count"];
+  int32 page = 1 [json_name = "page"];
+  int32 page_size = 2 [json_name = "page_size"];
+  repeated Record records = 3 [json_name = "records"];
+  int64 total = 4 [json_name = "total"];
 }
 
 message Record {
@@ -47,5 +50,5 @@ message GameRecord {
   string b_steps = 9 [json_name = "b_steps"];
   string map = 10 [json_name = "map"];
   string loser = 11 [json_name = "loser"];
-  string create_time = 12 [json_name = "create_time"];
+  int64 create_time = 12 [json_name = "create_time"];
 }

@@ -15,7 +15,13 @@ paths:
                 - name: page
                   in: query
                   schema:
-                    type: string
+                    type: integer
+                    format: int32
+                - name: page_size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
             responses:
                 "200":
                     description: OK
@@ -32,7 +38,13 @@ paths:
                 - name: page
                   in: query
                   schema:
-                    type: string
+                    type: integer
+                    format: int32
+                - name: page_size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
             responses:
                 "200":
                     description: OK
@@ -107,10 +119,7 @@ paths:
             responses:
                 "200":
                     description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/kob_kratos.v1.AddBotResponse'
+                    content: {}
     /api/user/bot/getlist:
         get:
             tags:
@@ -142,10 +151,7 @@ paths:
             responses:
                 "200":
                     description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/kob_kratos.v1.DeleteBotResponse'
+                    content: {}
     /api/user/bot/update:
         post:
             tags:
@@ -160,10 +166,7 @@ paths:
             responses:
                 "200":
                     description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/kob_kratos.v1.UpdateBotResponse'
+                    content: {}
 components:
     schemas:
         kob_kratos.v1.AddBotRequest:
@@ -179,11 +182,6 @@ components:
                     type: integer
                     format: int32
             description: 机器人相关消息定义
-        kob_kratos.v1.AddBotResponse:
-            type: object
-            properties:
-                message:
-                    type: string
         kob_kratos.v1.Bot:
             type: object
             properties:
@@ -210,11 +208,6 @@ components:
                     type: integer
                     format: int32
                 bot_id:
-                    type: string
-        kob_kratos.v1.DeleteBotResponse:
-            type: object
-            properties:
-                message:
                     type: string
         kob_kratos.v1.GameRecord:
             type: object
@@ -260,26 +253,36 @@ components:
         kob_kratos.v1.GetRankListResponse:
             type: object
             properties:
+                page:
+                    type: integer
+                    format: int32
+                page_size:
+                    type: integer
+                    format: int32
                 users:
                     type: array
                     items:
                         $ref: '#/components/schemas/kob_kratos.v1.RankUser'
-                user_count:
+                total:
                     type: string
         kob_kratos.v1.GetRecordListResponse:
             type: object
             properties:
+                page:
+                    type: integer
+                    format: int32
+                page_size:
+                    type: integer
+                    format: int32
                 records:
                     type: array
                     items:
                         $ref: '#/components/schemas/kob_kratos.v1.Record'
-                records_count:
+                total:
                     type: string
         kob_kratos.v1.GetUserInfoResponse:
             type: object
             properties:
-                message:
-                    type: string
                 user_id:
                     type: integer
                     format: int32
@@ -357,11 +360,6 @@ components:
                 code:
                     type: string
                 description:
-                    type: string
-        kob_kratos.v1.UpdateBotResponse:
-            type: object
-            properties:
-                message:
                     type: string
 tags:
     - name: BotService

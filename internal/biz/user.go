@@ -4,6 +4,7 @@ import (
 	"context"
 
 	v1 "kob-kratos/api/backend/v1"
+	"kob-kratos/internal/data/gormgen/query"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
@@ -19,18 +20,13 @@ type User struct {
 
 // UserRepository 用户仓储接口
 type UserRepository interface {
-	// Register 用户注册
-	Register(ctx context.Context, user *User) error
-	// Login 用户登录
-	Login(ctx context.Context, username, password string) (*User, error)
+	Insert(ctx context.Context, tx *query.Query, user *User) error
+	Update(ctx context.Context, tx *query.Query, user *User) error
 	// GetUserInfo 获取用户信息
 	GetUserInfo(ctx context.Context, userID int32) (*User, error)
 	// GetUserByUsername 根据用户名获取用户
 	GetUserByUsername(ctx context.Context, username string) (*User, error)
-	// UpdateUser 更新用户信息
-	UpdateUser(ctx context.Context, user *User) error
-	// CheckUserExists 检查用户是否存在
-	CheckUserExists(ctx context.Context, username string) (bool, error)
+	Transaction(ctx context.Context, fn func(tx *query.Query) error) error
 }
 
 // UserUsecase 用户用例

@@ -53,7 +53,6 @@ message GetUserInfoRequest {
 }
 
 message GetUserInfoResponse {
-  string message = 1 [json_name = "message"];
   int32 user_id = 2 [(validate.rules).int32.gt = 0, json_name = "user_id"];
   string username = 3 [json_name = "username"];
   string photo = 4 [json_name = "photo"];
