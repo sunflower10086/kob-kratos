@@ -20,6 +20,7 @@ import (
 var ProviderSet = wire.NewSet(
 	NewData,
 	NewPostgresDB,
+	NewUserRepository,
 )
 
 // Data .

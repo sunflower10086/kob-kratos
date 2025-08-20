@@ -36,53 +36,52 @@ type UserUsecase struct {
 }
 
 // NewUserUsecase 创建用户用例
-func NewUserUsecase(logger log.Logger) *UserUsecase {
+func NewUserUsecase(repo UserRepository, logger log.Logger) *UserUsecase {
 	return &UserUsecase{
-		// repo: repo,
-		log: log.NewHelper(logger),
+		repo: repo,
+		log:  log.NewHelper(logger),
 	}
 }
 
 // Register 用户注册
 func (uc *UserUsecase) Register(ctx context.Context, req *v1.RegisterRequest) (*v1.RegisterResponse, error) {
-	// // 验证密码确认
-	// if req.Password != req.ConfirmedPassword {
-	// 	uc.log.Error("密码和确认密码不匹配")
-	// 	return &v1.RegisterResponse{
-	// 		Message: "密码和确认密码不匹配",
-	// 	}, nil
-	// }
+	// 验证密码确认
+	if req.Password != req.ConfirmedPassword {
+		uc.log.Error("密码和确认密码不匹配")
+		return &v1.RegisterResponse{
+			Message: "密码和确认密码不匹配",
+		}, nil
+	}
 
-	// // 检查用户是否已存在
-	// exists, err := uc.repo.CheckUserExists(ctx, req.Username)
-	// if err != nil {
-	// 	uc.log.Errorf("检查用户是否存在失败: %v", err)
-	// 	return nil, err
-	// }
-	// if exists {
-	// 	return &v1.RegisterResponse{
-	// 		Message: "用户名已存在",
-	// 	}, nil
-	// }
+	// 检查用户是否已存在
+	existingUser, err := uc.repo.GetUserByUsername(ctx, req.Username)
+	if err != nil {
+		uc.log.Errorf("检查用户是否存在失败: %v", err)
+		return nil, err
+	}
+	if existingUser != nil {
+		return &v1.RegisterResponse{
+			Message: "用户名已存在",
+		}, nil
+	}
 
-	// // 创建用户
-	// user := &User{
-	// 	Username: req.Username,
-	// 	Password: req.Password, // 实际项目中应该加密密码
-	// 	Photo:    "",           // 默认头像
-	// 	Rating:   1500,         // 默认评分
-	// }
+	// 创建用户
+	user := &User{
+		Username: req.Username,
+		Password: req.Password, // 密码会在data层进行加密
+		Photo:    "",           // 默认头像
+		Rating:   1500,         // 默认评分
+	}
 
-	// err = uc.repo.Register(ctx, user)
-	// if err != nil {
-	// 	uc.log.Errorf("用户注册失败: %v", err)
-	// 	return nil, err
-	// }
+	err = uc.repo.Insert(ctx, nil, user)
+	if err != nil {
+		uc.log.Errorf("用户注册失败: %v", err)
+		return nil, err
+	}
 
-	// return &v1.RegisterResponse{
-	// 	Message: "注册成功",
-	// }, nil
-	panic("implement me")
+	return &v1.RegisterResponse{
+		Message: "注册成功",
+	}, nil
 }
 
 // Login 用户登录

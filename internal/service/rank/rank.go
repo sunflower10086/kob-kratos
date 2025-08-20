@@ -1,6 +1,8 @@
 package rank
 
 import (
+	"context"
+
 	v1 "kob-kratos/api/backend/v1"
 	"kob-kratos/internal/biz"
 
@@ -20,4 +22,8 @@ func NewService(rankUc *biz.RankUsecase, logger log.Logger) *Service {
 		rankUc: rankUc,
 		log:    log.NewHelper(log.With(logger, "module", "service/rank")),
 	}
+}
+
+func (s *Service) GetRankList(ctx context.Context, req *v1.GetRankListRequest) (*v1.GetRankListResponse, error) {
+	return nil, nil
 }

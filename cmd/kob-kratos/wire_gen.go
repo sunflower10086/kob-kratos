@@ -11,6 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"kob-kratos/internal/biz"
 	"kob-kratos/internal/conf"
+	"kob-kratos/internal/data"
 	"kob-kratos/internal/server"
 	"kob-kratos/internal/service/bot"
 	"kob-kratos/internal/service/rank"
@@ -25,8 +26,18 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	userUsecase := biz.NewUserUsecase(logger)
+func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+	db, cleanup, err := data.NewPostgresDB(confData, logger)
+	if err != nil {
+		return nil, nil, err
+	}
+	dataData, cleanup2, err := data.NewData(confData, logger, db)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	userRepository := data.NewUserRepository(dataData, logger)
+	userUsecase := biz.NewUserUsecase(userRepository, logger)
 	service := user.NewService(userUsecase, logger)
 	recordUsecase := biz.NewRecordUsecase(logger)
 	recordService := record.NewService(recordUsecase, logger)
@@ -38,5 +49,7 @@ func wireApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*krat
 	httpServer := server.NewHTTPServer(confServer, service, recordService, rankService, botService, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
+		cleanup2()
+		cleanup()
 	}, nil
 }

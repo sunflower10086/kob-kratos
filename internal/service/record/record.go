@@ -1,6 +1,8 @@
 package record
 
 import (
+	"context"
+
 	v1 "kob-kratos/api/backend/v1"
 	"kob-kratos/internal/biz"
 
@@ -20,4 +22,8 @@ func NewService(recordUc *biz.RecordUsecase, logger log.Logger) *Service {
 		recordUc: recordUc,
 		log:      log.NewHelper(log.With(logger, "module", "service/record")),
 	}
+}
+
+func (s *Service) GetRecordList(ctx context.Context, req *v1.GetRecordListRequest) (*v1.GetRecordListResponse, error) {
+	return nil, nil
 }

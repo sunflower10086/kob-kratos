@@ -1,6 +1,8 @@
 package user
 
 import (
+	"context"
+
 	v1 "kob-kratos/api/backend/v1"
 	"kob-kratos/internal/biz"
 
@@ -20,4 +22,16 @@ func NewService(userUc *biz.UserUsecase, logger log.Logger) *Service {
 		log:    log.NewHelper(log.With(logger, "module", "service/user")),
 		userUc: userUc,
 	}
+}
+
+func (s *Service) Register(ctx context.Context, req *v1.RegisterRequest) (*v1.RegisterResponse, error) {
+	return s.userUc.Register(ctx, req)
+}
+
+func (s *Service) Login(ctx context.Context, req *v1.LoginRequest) (*v1.LoginResponse, error) {
+	return nil, nil
+}
+
+func (s *Service) GetUserInfo(ctx context.Context, req *v1.GetUserInfoRequest) (*v1.GetUserInfoResponse, error) {
+	return nil, nil
 }
