@@ -2,6 +2,7 @@ package biz
 
 import (
 	"context"
+	"strconv"
 
 	v1 "kob-kratos/api/backend/v1"
 	"kob-kratos/internal/data/gormgen/query"
@@ -132,7 +133,9 @@ func (uc *BotUsecase) DeleteBot(ctx context.Context, req *v1.DeleteBotRequest) e
 
 // parseStringToInt32 字符串转int32的辅助函数
 func parseStringToInt32(s string) int32 {
-	// 这里应该有适当的错误处理，简化示例
-	// 实际项目中应该使用strconv.ParseInt等函数
-	return 0 // 占位符
+	i, err := strconv.ParseInt(s, 10, 32)
+	if err != nil {
+		return 0
+	}
+	return int32(i)
 }
