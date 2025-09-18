@@ -26,7 +26,7 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+func wireApp(confServer *conf.Server, confData *conf.Data, bootstrap *conf.Bootstrap, jwt *conf.Jwt, logger log.Logger) (*kratos.App, func(), error) {
 	db, cleanup, err := data.NewPostgresDB(confData, logger)
 	if err != nil {
 		return nil, nil, err
@@ -37,7 +37,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 		return nil, nil, err
 	}
 	userRepository := data.NewUserRepository(dataData, logger)
-	userUsecase := biz.NewUserUsecase(userRepository, logger)
+	userUsecase := biz.NewUserUsecase(userRepository, logger, jwt)
 	service := user.NewService(userUsecase, logger)
 	recordUsecase := biz.NewRecordUsecase(logger)
 	recordService := record.NewService(recordUsecase, logger)
@@ -46,7 +46,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	botUsecase := biz.NewBotUsecase(logger)
 	botService := bot.NewService(botUsecase, logger)
 	grpcServer := server.NewGRPCServer(confServer, service, recordService, rankService, botService, logger)
-	httpServer := server.NewHTTPServer(confServer, service, recordService, rankService, botService, logger)
+	httpServer := server.NewHTTPServer(bootstrap, service, recordService, rankService, botService, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup2()

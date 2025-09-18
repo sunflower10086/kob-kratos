@@ -6,6 +6,7 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v1.0.4
 	github.com/go-kratos/kratos/contrib/log/zap/v2 v2.0.0-20250731084034-f7f150c3f139
 	github.com/go-kratos/kratos/v2 v2.8.4
+	github.com/golang-jwt/jwt/v5 v5.1.0
 	github.com/google/wire v0.6.0
 	github.com/kakuilan/kgo v0.5.1
 	github.com/natefinch/lumberjack v2.0.0+incompatible

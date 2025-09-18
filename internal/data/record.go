@@ -107,7 +107,7 @@ func (r *recordRepo) CreateRecord(ctx context.Context, tx *query.Query, record *
 }
 
 // GetRecordByID 根据ID获取记录
-func (r *recordRepo) GetRecordByID(ctx context.Context, recordID int32) (*biz.Record, error) {
+func (r *recordRepo) GetRecordByID(ctx context.Context, recordID int64) (*biz.Record, error) {
 	modelRecord, err := r.data.DB.WithContext(ctx).Record.Where(r.data.DB.Record.ID.Eq(recordID)).First()
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
@@ -122,7 +122,7 @@ func (r *recordRepo) GetRecordByID(ctx context.Context, recordID int32) (*biz.Re
 }
 
 // GetUserRecords 获取用户的游戏记录（支持分页大小参数）
-func (r *recordRepo) GetUserRecords(ctx context.Context, userID int32, page, pageSize int32) ([]*biz.Record, int64, error) {
+func (r *recordRepo) GetUserRecords(ctx context.Context, userID int64, page, pageSize int32) ([]*biz.Record, int64, error) {
 	// 如果pageSize为0，使用默认值
 	if pageSize <= 0 {
 		pageSize = 10

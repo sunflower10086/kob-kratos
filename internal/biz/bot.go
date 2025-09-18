@@ -12,8 +12,8 @@ import (
 
 // Bot 机器人实体
 type Bot struct {
-	ID          int32  `json:"id"`
-	UserID      int32  `json:"user_id"`
+	ID          int64  `json:"id"`
+	UserID      int64  `json:"user_id"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Code        string `json:"code"`
@@ -25,9 +25,9 @@ type Bot struct {
 type BotRepository interface {
 	Insert(ctx context.Context, tx *query.Query, bot *Bot) error
 	Update(ctx context.Context, tx *query.Query, bot *Bot) error
-	DeleteBot(ctx context.Context, tx *query.Query, botID int32) error
-	GetBotList(ctx context.Context, page, pageSize int32, userID int32) ([]*Bot, int64, error)
-	GetBotByID(ctx context.Context, botID int32) (*Bot, error)
+	DeleteBot(ctx context.Context, tx *query.Query, botID int64) error
+	GetBotList(ctx context.Context, page, pageSize int32, userID int64) ([]*Bot, int64, error)
+	GetBotByID(ctx context.Context, botID int64) (*Bot, error)
 	Transaction(ctx context.Context, fn func(tx *query.Query) error) error
 }
 
@@ -129,6 +129,15 @@ func (uc *BotUsecase) DeleteBot(ctx context.Context, req *v1.DeleteBotRequest) e
 	// 	Message: "机器人删除成功",
 	// }, nil
 	panic("implement me")
+}
+
+// parseStringToInt64 字符串转int64的辅助函数
+func parseStringToInt64(s string) int64 {
+	i, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		return 0
+	}
+	return i
 }
 
 // parseStringToInt32 字符串转int32的辅助函数

@@ -2,20 +2,25 @@ package biz
 
 import (
 	"context"
+	"time"
 
 	v1 "kob-kratos/api/backend/v1"
+	"kob-kratos/internal/conf"
 	"kob-kratos/internal/data/gormgen/query"
+	"kob-kratos/internal/pkg/jwtc"
+	"kob-kratos/pkg/codex"
+	"kob-kratos/pkg/errx"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
 
 // User 用户实体
 type User struct {
-	ID       int32  `json:"id"`
+	ID       int64  `json:"id"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Photo    string `json:"photo"`
-	Rating   int32  `json:"rating"`
+	Rating   int64  `json:"rating"`
 }
 
 // UserRepository 用户仓储接口
@@ -23,7 +28,7 @@ type UserRepository interface {
 	Insert(ctx context.Context, tx *query.Query, user *User) error
 	Update(ctx context.Context, tx *query.Query, user *User) error
 	// GetUserInfo 获取用户信息
-	GetUserInfo(ctx context.Context, userID int32) (*User, error)
+	GetUserInfo(ctx context.Context, userID int64) (*User, error)
 	// GetUserByUsername 根据用户名获取用户
 	GetUserByUsername(ctx context.Context, username string) (*User, error)
 	Transaction(ctx context.Context, fn func(tx *query.Query) error) error
@@ -32,14 +37,18 @@ type UserRepository interface {
 // UserUsecase 用户用例
 type UserUsecase struct {
 	repo UserRepository
-	log  *log.Helper
+
+	jwtConf *conf.Jwt
+
+	log *log.Helper
 }
 
 // NewUserUsecase 创建用户用例
-func NewUserUsecase(repo UserRepository, logger log.Logger) *UserUsecase {
+func NewUserUsecase(repo UserRepository, logger log.Logger, jwtConf *conf.Jwt) *UserUsecase {
 	return &UserUsecase{
-		repo: repo,
-		log:  log.NewHelper(logger),
+		repo:    repo,
+		log:     log.NewHelper(logger),
+		jwtConf: jwtConf,
 	}
 }
 
@@ -47,22 +56,19 @@ func NewUserUsecase(repo UserRepository, logger log.Logger) *UserUsecase {
 func (uc *UserUsecase) Register(ctx context.Context, req *v1.RegisterRequest) (*v1.RegisterResponse, error) {
 	// 验证密码确认
 	if req.Password != req.ConfirmedPassword {
-		uc.log.Error("密码和确认密码不匹配")
-		return &v1.RegisterResponse{
-			Message: "密码和确认密码不匹配",
-		}, nil
+		err := errx.New(codex.CodeConfirmPasswordError, "密码和确认密码不匹配")
+		return nil, err
 	}
 
 	// 检查用户是否已存在
 	existingUser, err := uc.repo.GetUserByUsername(ctx, req.Username)
 	if err != nil {
-		uc.log.Errorf("检查用户是否存在失败: %v", err)
+		err := errx.Internal(err, "检查用户是否存在失败")
 		return nil, err
 	}
 	if existingUser != nil {
-		return &v1.RegisterResponse{
-			Message: "用户名已存在",
-		}, nil
+		err := errx.New(codex.CodeUserExist, "用户名已存在")
+		return nil, err
 	}
 
 	// 创建用户
@@ -75,7 +81,7 @@ func (uc *UserUsecase) Register(ctx context.Context, req *v1.RegisterRequest) (*
 
 	err = uc.repo.Insert(ctx, nil, user)
 	if err != nil {
-		uc.log.Errorf("用户注册失败: %v", err)
+		err := errx.Internal(err, "用户注册失败")
 		return nil, err
 	}
 
@@ -88,14 +94,12 @@ func (uc *UserUsecase) Register(ctx context.Context, req *v1.RegisterRequest) (*
 func (uc *UserUsecase) Login(ctx context.Context, req *v1.LoginRequest) (*v1.LoginResponse, error) {
 	user, err := uc.repo.GetUserByUsername(ctx, req.Username)
 	if err != nil {
-		uc.log.Errorf("用户登录失败: %v", err)
+		err := errx.Internal(err, "用户登录失败")
 		return nil, err
 	}
 
 	if user == nil {
-		return &v1.LoginResponse{
-			Token: "",
-		}, nil
+		return nil, errx.New(codex.CodeUserNotExist, "用户不存在")
 	}
 
 	// 这里应该验证密码，简化处理
@@ -106,7 +110,10 @@ func (uc *UserUsecase) Login(ctx context.Context, req *v1.LoginRequest) (*v1.Log
 	}
 
 	// 生成JWT token
-	token := generateJWTToken(user.ID, user.Username)
+	token, err := generateJWTToken(uc.jwtConf.AccessSecret, user.ID)
+	if err != nil {
+		return nil, err
+	}
 
 	return &v1.LoginResponse{
 		Token: token,
@@ -115,19 +122,14 @@ func (uc *UserUsecase) Login(ctx context.Context, req *v1.LoginRequest) (*v1.Log
 
 // GetUserInfo 获取用户信息
 func (uc *UserUsecase) GetUserInfo(ctx context.Context, req *v1.GetUserInfoRequest) (*v1.GetUserInfoResponse, error) {
-	userID := parseStringToInt32(req.UserId)
-	user, err := uc.repo.GetUserInfo(ctx, userID)
+	user, err := uc.repo.GetUserInfo(ctx, req.UserId)
 	if err != nil {
 		uc.log.Errorf("获取用户信息失败: %v", err)
 		return nil, err
 	}
 
 	if user == nil {
-		return &v1.GetUserInfoResponse{
-			UserId:   0,
-			Username: "",
-			Photo:    "",
-		}, nil
+		return nil, errx.New(codex.CodeUserNotExist, "用户不存在")
 	}
 
 	return &v1.GetUserInfoResponse{
@@ -158,6 +160,16 @@ func (uc *UserUsecase) UpdateUser(ctx context.Context, user *User) error {
 }
 
 // generateJWTToken 生成JWT token（简化实现）
-func generateJWTToken(userID int32, username string) string {
-	return "fixed_jwt_token_for_development"
+func generateJWTToken(jwtSk string, userID int64) (string, error) {
+	payload := jwtc.Payload{
+		Uid: userID,
+		Iat: time.Now().Unix(),
+		Exp: time.Now().Add(time.Hour * 24).Unix(),
+	}
+	token, err := jwtc.GenJwtToken(jwtSk, &payload)
+	if err != nil {
+		err := errx.Internal(err, "生成JWT token失败")
+		return "", err
+	}
+	return token, nil
 }

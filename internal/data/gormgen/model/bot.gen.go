@@ -14,8 +14,8 @@ const TableNameBot = "bot"
 
 // Bot mapped from table <bot>
 type Bot struct {
-	ID          int32          `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
-	UserID      int32          `gorm:"column:user_id;not null;index:idx_bot_user_id,priority:1;index:idx_bot_user_created_at,priority:2" json:"user_id"`
+	ID          int64          `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
+	UserID      int64          `gorm:"column:user_id;primaryKey;index:idx_bot_user_created_at,priority:2;index:idx_bot_user_id,priority:1" json:"user_id"`
 	Title       string         `gorm:"column:title;not null;index:idx_bot_title,priority:1" json:"title"`
 	Description *string        `gorm:"column:description" json:"description"`
 	Code        string         `gorm:"column:code;not null" json:"code"`

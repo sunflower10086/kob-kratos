@@ -29,7 +29,7 @@ func NewUserRepository(data *Data, logger log.Logger) biz.UserRepository {
 }
 
 // GetUserInfo 获取用户信息
-func (r *userRepo) GetUserInfo(ctx context.Context, userID int32) (*biz.User, error) {
+func (r *userRepo) GetUserInfo(ctx context.Context, userID int64) (*biz.User, error) {
 	modelUser, err := r.data.DB.WithContext(ctx).User.Where(r.data.DB.User.ID.Eq(userID)).First()
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {

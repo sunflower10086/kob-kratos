@@ -57,7 +57,6 @@ message GetBotListResponse {
 
 message Bot {
   int32 id = 1 [(validate.rules).int32.gt = 0, json_name = "id"];
-  int32 user_id = 2 [(validate.rules).int32.gt = 0, json_name = "user_id"];
   string title = 3 [json_name = "title"];
   string description = 4 [json_name = "description"];
   string code = 5 [json_name = "code"];
@@ -66,7 +65,6 @@ message Bot {
 }
 
 message UpdateBotRequest {
-  string user_id = 1 [json_name = "user_id"];
   string bot_id = 2 [(validate.rules).string.min_len = 1, json_name = "bot_id"];
   string title = 3 [(validate.rules).string.min_len = 1, json_name = "title"];
   string code = 4 [(validate.rules).string.min_len = 1, json_name = "code"];
@@ -78,7 +76,6 @@ message UpdateBotRequest {
 // }
 
 message DeleteBotRequest {
-  int32 user_id = 1 [(validate.rules).int32.gt = 0, json_name = "user_id"];
   string bot_id = 2 [(validate.rules).string.min_len = 1, json_name = "bot_id"];
 }
 

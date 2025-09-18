@@ -62,7 +62,7 @@ func (r *rankRepo) GetRankList(ctx context.Context, page, pageSize int32) ([]*bi
 }
 
 // GetUserRank 获取用户排名
-func (r *rankRepo) GetUserRank(ctx context.Context, userID int32) (*biz.RankUser, error) {
+func (r *rankRepo) GetUserRank(ctx context.Context, userID int64) (*biz.RankUser, error) {
 	// 获取用户信息
 	modelUser, err := r.data.DB.WithContext(ctx).User.Where(r.data.DB.User.ID.Eq(userID)).First()
 	if err != nil {
@@ -105,7 +105,7 @@ func (r *rankRepo) GetUserRank(ctx context.Context, userID int32) (*biz.RankUser
 }
 
 // UpdateUserRating 更新用户评分（事务方法）
-func (r *rankRepo) UpdateUserRating(ctx context.Context, tx *query.Query, userID int32, rating int32) error {
+func (r *rankRepo) UpdateUserRating(ctx context.Context, tx *query.Query, userID int64, rating int64) error {
 	// 如果tx为空，使用r.data.DB
 	db := tx
 	if db == nil {

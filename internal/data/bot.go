@@ -29,7 +29,7 @@ func NewBotRepository(data *Data, logger log.Logger) biz.BotRepository {
 }
 
 // GetBotList 获取机器人列表
-func (r *botRepo) GetBotList(ctx context.Context, page, pageSize int32, userID int32) ([]*biz.Bot, int64, error) {
+func (r *botRepo) GetBotList(ctx context.Context, page, pageSize int32, userID int64) ([]*biz.Bot, int64, error) {
 	b := r.data.DB.WithContext(ctx).Bot
 
 	db := b.
@@ -55,7 +55,7 @@ func (r *botRepo) GetBotList(ctx context.Context, page, pageSize int32, userID i
 }
 
 // GetBotByID 根据ID获取机器人
-func (r *botRepo) GetBotByID(ctx context.Context, botID int32) (*biz.Bot, error) {
+func (r *botRepo) GetBotByID(ctx context.Context, botID int64) (*biz.Bot, error) {
 	modelBot, err := r.data.DB.WithContext(ctx).Bot.Where(r.data.DB.Bot.ID.Eq(botID)).First()
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
@@ -150,7 +150,7 @@ func (r *botRepo) Update(ctx context.Context, tx *query.Query, bot *biz.Bot) err
 }
 
 // DeleteBot 删除机器人（事务方法）
-func (r *botRepo) DeleteBot(ctx context.Context, tx *query.Query, botID int32) error {
+func (r *botRepo) DeleteBot(ctx context.Context, tx *query.Query, botID int64) error {
 	// 如果tx为空，使用r.data.DB
 	db := tx
 	if db == nil {

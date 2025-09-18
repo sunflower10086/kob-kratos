@@ -188,9 +188,6 @@ components:
                 id:
                     type: integer
                     format: int32
-                user_id:
-                    type: integer
-                    format: int32
                 title:
                     type: string
                 description:
@@ -204,9 +201,6 @@ components:
         kob_kratos.v1.DeleteBotRequest:
             type: object
             properties:
-                user_id:
-                    type: integer
-                    format: int32
                 bot_id:
                     type: string
         kob_kratos.v1.GameRecord:
@@ -284,8 +278,7 @@ components:
             type: object
             properties:
                 user_id:
-                    type: integer
-                    format: int32
+                    type: string
                 username:
                     type: string
                 photo:
@@ -351,8 +344,6 @@ components:
         kob_kratos.v1.UpdateBotRequest:
             type: object
             properties:
-                user_id:
-                    type: string
                 bot_id:
                     type: string
                 title:

@@ -11,11 +11,11 @@ import (
 
 // GameRecord 游戏记录实体
 type GameRecord struct {
-	ID         int32  `json:"id"`
-	AID        int32  `json:"a_id"`
+	ID         int64  `json:"id"`
+	AID        int64  `json:"a_id"`
 	ASX        int32  `json:"a_sx"`
 	ASY        int32  `json:"a_sy"`
-	BID        int32  `json:"b_id"`
+	BID        int64  `json:"b_id"`
 	BSX        int32  `json:"b_sx"`
 	BSY        int32  `json:"b_sy"`
 	ASteps     string `json:"a_steps"`
@@ -42,9 +42,9 @@ type RecordRepository interface {
 	// CreateRecord 创建游戏记录
 	CreateRecord(ctx context.Context, tx *query.Query, record *GameRecord) error
 	// GetRecordByID 根据ID获取记录
-	GetRecordByID(ctx context.Context, recordID int32) (*Record, error)
+	GetRecordByID(ctx context.Context, recordID int64) (*Record, error)
 	// GetUserRecords 获取用户的游戏记录
-	GetUserRecords(ctx context.Context, userID int32, page, pageSize int32) ([]*Record, int64, error)
+	GetUserRecords(ctx context.Context, userID int64, page, pageSize int32) ([]*Record, int64, error)
 	Transaction(ctx context.Context, fn func(tx *query.Query) error) error
 }
 
@@ -121,7 +121,7 @@ func (uc *RecordUsecase) CreateRecord(ctx context.Context, record *GameRecord) e
 }
 
 // GetRecordByID 根据ID获取记录
-func (uc *RecordUsecase) GetRecordByID(ctx context.Context, recordID int32) (*Record, error) {
+func (uc *RecordUsecase) GetRecordByID(ctx context.Context, recordID int64) (*Record, error) {
 	// record, err := uc.repo.GetRecordByID(ctx, recordID)
 	// if err != nil {
 	// 	uc.log.Errorf("获取记录失败: %v", err)
@@ -132,7 +132,7 @@ func (uc *RecordUsecase) GetRecordByID(ctx context.Context, recordID int32) (*Re
 }
 
 // GetUserRecords 获取用户的游戏记录
-func (uc *RecordUsecase) GetUserRecords(ctx context.Context, userID int32, page int32) ([]*Record, int64, error) {
+func (uc *RecordUsecase) GetUserRecords(ctx context.Context, userID int64, page int32) ([]*Record, int64, error) {
 	// records, count, err := uc.repo.GetUserRecords(ctx, userID, page)
 	// if err != nil {
 	// 	uc.log.Errorf("获取用户游戏记录失败: %v", err)

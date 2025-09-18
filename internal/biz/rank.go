@@ -11,10 +11,10 @@ import (
 
 // RankUser 排行榜用户实体
 type RankUser struct {
-	ID       int32  `json:"id"`
+	ID       int64  `json:"id"`
 	Photo    string `json:"photo"`
 	Username string `json:"username"`
-	Rating   int32  `json:"rating"`
+	Rating   int64  `json:"rating"`
 	Number   int32  `json:"number"`
 }
 
@@ -23,9 +23,9 @@ type RankRepository interface {
 	// GetRankList 获取排行榜列表
 	GetRankList(ctx context.Context, page, pageSize int32) ([]*RankUser, int64, error)
 	// GetUserRank 获取用户排名
-	GetUserRank(ctx context.Context, userID int32) (*RankUser, error)
+	GetUserRank(ctx context.Context, userID int64) (*RankUser, error)
 	// UpdateUserRating 更新用户评分
-	UpdateUserRating(ctx context.Context, tx *query.Query, userID int32, rating int32) error
+	UpdateUserRating(ctx context.Context, tx *query.Query, userID int64, rating int64) error
 	Transaction(ctx context.Context, fn func(tx *query.Query) error) error
 }
 
@@ -75,7 +75,7 @@ func (uc *RankUsecase) GetRankList(ctx context.Context, req *v1.GetRankListReque
 }
 
 // GetUserRank 获取用户排名
-func (uc *RankUsecase) GetUserRank(ctx context.Context, userID int32) (*RankUser, error) {
+func (uc *RankUsecase) GetUserRank(ctx context.Context, userID int64) (*RankUser, error) {
 	// user, err := uc.repo.GetUserRank(ctx, userID)
 	// if err != nil {
 	// 	uc.log.Errorf("获取用户排名失败: %v", err)
@@ -86,7 +86,7 @@ func (uc *RankUsecase) GetUserRank(ctx context.Context, userID int32) (*RankUser
 }
 
 // UpdateUserRating 更新用户评分
-func (uc *RankUsecase) UpdateUserRating(ctx context.Context, userID int32, rating int32) error {
+func (uc *RankUsecase) UpdateUserRating(ctx context.Context, userID int64, rating int32) error {
 	// err := uc.repo.UpdateUserRating(ctx, userID, rating)
 	// if err != nil {
 	// 	uc.log.Errorf("更新用户评分失败: %v", err)

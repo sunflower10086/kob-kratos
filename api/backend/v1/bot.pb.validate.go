@@ -460,17 +460,6 @@ func (m *Bot) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.GetUserId() <= 0 {
-		err := BotValidationError{
-			field:  "UserId",
-			reason: "value must be greater than 0",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	// no validation rules for Title
 
 	// no validation rules for Description
@@ -579,8 +568,6 @@ func (m *UpdateBotRequest) validate(all bool) error {
 	}
 
 	var errors []error
-
-	// no validation rules for UserId
 
 	if utf8.RuneCountInString(m.GetBotId()) < 1 {
 		err := UpdateBotRequestValidationError{
@@ -725,17 +712,6 @@ func (m *DeleteBotRequest) validate(all bool) error {
 	}
 
 	var errors []error
-
-	if m.GetUserId() <= 0 {
-		err := DeleteBotRequestValidationError{
-			field:  "UserId",
-			reason: "value must be greater than 0",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
 
 	if utf8.RuneCountInString(m.GetBotId()) < 1 {
 		err := DeleteBotRequestValidationError{

@@ -28,11 +28,11 @@ func newRecord(db *gorm.DB, opts ...gen.DOOption) record {
 
 	tableName := _record.recordDo.TableName()
 	_record.ALL = field.NewAsterisk(tableName)
-	_record.ID = field.NewInt32(tableName, "id")
-	_record.AID = field.NewInt32(tableName, "a_id")
+	_record.ID = field.NewInt64(tableName, "id")
+	_record.AID = field.NewInt64(tableName, "a_id")
 	_record.ASx = field.NewInt32(tableName, "a_sx")
 	_record.ASy = field.NewInt32(tableName, "a_sy")
-	_record.BID = field.NewInt32(tableName, "b_id")
+	_record.BID = field.NewInt64(tableName, "b_id")
 	_record.BSx = field.NewInt32(tableName, "b_sx")
 	_record.BSy = field.NewInt32(tableName, "b_sy")
 	_record.ASteps = field.NewString(tableName, "a_steps")
@@ -53,11 +53,11 @@ type record struct {
 	recordDo
 
 	ALL       field.Asterisk
-	ID        field.Int32
-	AID       field.Int32
+	ID        field.Int64
+	AID       field.Int64
 	ASx       field.Int32
 	ASy       field.Int32
-	BID       field.Int32
+	BID       field.Int64
 	BSx       field.Int32
 	BSy       field.Int32
 	ASteps    field.String
@@ -84,11 +84,11 @@ func (r record) As(alias string) *record {
 
 func (r *record) updateTableName(table string) *record {
 	r.ALL = field.NewAsterisk(table)
-	r.ID = field.NewInt32(table, "id")
-	r.AID = field.NewInt32(table, "a_id")
+	r.ID = field.NewInt64(table, "id")
+	r.AID = field.NewInt64(table, "a_id")
 	r.ASx = field.NewInt32(table, "a_sx")
 	r.ASy = field.NewInt32(table, "a_sy")
-	r.BID = field.NewInt32(table, "b_id")
+	r.BID = field.NewInt64(table, "b_id")
 	r.BSx = field.NewInt32(table, "b_sx")
 	r.BSy = field.NewInt32(table, "b_sy")
 	r.ASteps = field.NewString(table, "a_steps")
