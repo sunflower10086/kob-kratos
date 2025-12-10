@@ -4,7 +4,7 @@ import (
 	"context"
 
 	v1 "kob-kratos/api/gen/backend/v1"
-	"kob-kratos/internal/biz"
+	"kob-kratos/app/backend/internal/biz"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"google.golang.org/protobuf/types/known/emptypb"

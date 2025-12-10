@@ -1,10 +1,10 @@
 package service
 
 import (
-	"kob-kratos/internal/service/bot"
-	"kob-kratos/internal/service/rank"
-	"kob-kratos/internal/service/record"
-	"kob-kratos/internal/service/user"
+	"kob-kratos/app/backend/internal/service/bot"
+	"kob-kratos/app/backend/internal/service/rank"
+	"kob-kratos/app/backend/internal/service/record"
+	"kob-kratos/app/backend/internal/service/user"
 
 	"github.com/google/wire"
 )

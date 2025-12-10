@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"kob-kratos/internal/conf"
+	"kob-kratos/app/backend/internal/conf"
 
 	"github.com/go-kratos/kratos/contrib/log/zap/v2"
 	"github.com/go-kratos/kratos/v2"

@@ -2,11 +2,11 @@ package server
 
 import (
 	v1 "kob-kratos/api/gen/backend/v1"
-	"kob-kratos/internal/conf"
-	"kob-kratos/internal/service/bot"
-	"kob-kratos/internal/service/rank"
-	"kob-kratos/internal/service/record"
-	"kob-kratos/internal/service/user"
+	"kob-kratos/app/backend/internal/conf"
+	"kob-kratos/app/backend/internal/service/bot"
+	"kob-kratos/app/backend/internal/service/rank"
+	"kob-kratos/app/backend/internal/service/record"
+	"kob-kratos/app/backend/internal/service/user"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
