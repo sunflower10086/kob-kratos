@@ -4,7 +4,7 @@ import (
 	"context"
 
 	v1 "kob-kratos/api/gen/backend/v1"
-	"kob-kratos/app/backend/internal/data/gormgen/query"
+	"kob-kratos/app/game/internal/data/gormgen/query"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
@@ -36,68 +36,62 @@ type RankUsecase struct {
 }
 
 // NewRankUsecase 创建排行榜用例
-func NewRankUsecase(repo RankRepository, logger log.Logger) *RankUsecase {
+func NewRankUsecase(logger log.Logger) *RankUsecase {
 	return &RankUsecase{
-		repo: repo,
-		log:  log.NewHelper(logger),
+		// repo: repo,
+		log: log.NewHelper(logger),
 	}
 }
 
-// GetRankList 获取排行榜列表
 // GetRankList 获取排行榜列表
 func (uc *RankUsecase) GetRankList(ctx context.Context, req *v1.GetRankListRequest) (*v1.GetRankListResponse, error) {
-	page := req.Page
-	if page <= 0 {
-		page = 1
-	}
-	pageSize := req.PageSize
-	if pageSize <= 0 {
-		pageSize = 10
-	}
+	// page := parseStringToInt32(req.Page)
+	// if page <= 0 {
+	// 	page = 1
+	// }
 
-	users, userCount, err := uc.repo.GetRankList(ctx, page, pageSize)
-	if err != nil {
-		uc.log.Errorf("获取排行榜列表失败: %v", err)
-		return nil, err
-	}
+	// users, userCount, err := uc.repo.GetRankList(ctx, page)
+	// if err != nil {
+	// 	uc.log.Errorf("获取排行榜列表失败: %v", err)
+	// 	return nil, err
+	// }
 
-	userList := make([]*v1.RankUser, 0, len(users))
-	for _, user := range users {
-		userList = append(userList, &v1.RankUser{
-			Id:       int32(user.ID),
-			Photo:    user.Photo,
-			Username: user.Username,
-			Rating:   int32(user.Rating),
-			Number:   user.Number,
-		})
-	}
+	// userList := make([]*v1.RankUser, 0, len(users))
+	// for _, user := range users {
+	// 	userList = append(userList, &v1.RankUser{
+	// 		Id:       user.ID,
+	// 		Photo:    user.Photo,
+	// 		Username: user.Username,
+	// 		Rating:   user.Rating,
+	// 		Number:   user.Number,
+	// 	})
+	// }
 
-	return &v1.GetRankListResponse{
-		Users:    userList,
-		Total:    userCount,
-		Page:     page,
-		PageSize: pageSize,
-	}, nil
+	// return &v1.GetRankListResponse{
+	// 	Users:     userList,
+	// 	UserCount: userCount,
+	// }, nil
+	panic("implement me")
 }
 
-// GetUserRank 获取用户排名
 // GetUserRank 获取用户排名
 func (uc *RankUsecase) GetUserRank(ctx context.Context, userID int64) (*RankUser, error) {
-	user, err := uc.repo.GetUserRank(ctx, userID)
-	if err != nil {
-		uc.log.Errorf("获取用户排名失败: %v", err)
-		return nil, err
-	}
-	return user, nil
+	// user, err := uc.repo.GetUserRank(ctx, userID)
+	// if err != nil {
+	// 	uc.log.Errorf("获取用户排名失败: %v", err)
+	// 	return nil, err
+	// }
+	// return user, nil
+	panic("implement me")
 }
 
 // UpdateUserRating 更新用户评分
-// UpdateUserRating 更新用户评分
 func (uc *RankUsecase) UpdateUserRating(ctx context.Context, userID int64, rating int32) error {
-	err := uc.repo.UpdateUserRating(ctx, nil, userID, int64(rating))
-	if err != nil {
-		uc.log.Errorf("更新用户评分失败: %v", err)
-		return err
-	}
-	return nil
+	// err := uc.repo.UpdateUserRating(ctx, userID, rating)
+	// if err != nil {
+	// 	uc.log.Errorf("更新用户评分失败: %v", err)
+	// 	return err
+	// }
+	// return nil
+	panic("implement me")
 }

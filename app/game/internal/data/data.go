@@ -3,8 +3,8 @@ package data
 import (
 	"database/sql"
 
-	"kob-kratos/app/backend/internal/conf"
-	"kob-kratos/app/backend/internal/data/gormgen/query"
+	"kob-kratos/app/game/internal/conf"
+	"kob-kratos/app/game/internal/data/gormgen/query"
 
 	"github.com/google/wire"
 	"github.com/pkg/errors"
@@ -20,10 +20,6 @@ import (
 var ProviderSet = wire.NewSet(
 	NewData,
 	NewPostgresDB,
-	NewUserRepository,
-	NewBotRepository,
-	NewRankRepository,
-	NewRecordRepository,
 )
 
 // Data .

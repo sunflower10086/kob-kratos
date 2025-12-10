@@ -25,5 +25,5 @@ func NewService(rankUc *biz.RankUsecase, logger log.Logger) *Service {
 }
 
 func (s *Service) GetRankList(ctx context.Context, req *v1.GetRankListRequest) (*v1.GetRankListResponse, error) {
-	return nil, nil
+	return s.rankUc.GetRankList(ctx, req)
 }

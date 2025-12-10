@@ -25,5 +25,5 @@ func NewService(recordUc *biz.RecordUsecase, logger log.Logger) *Service {
 }
 
 func (s *Service) GetRecordList(ctx context.Context, req *v1.GetRecordListRequest) (*v1.GetRecordListResponse, error) {
-	return nil, nil
+	return s.recordUc.GetRecordList(ctx, req)
 }

@@ -1,0 +1,124 @@
+syntax = "proto3";
+package kratos.api;
+
+option go_package = "blog/internal/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+message Bootstrap {
+  Server server = 1;
+  Data data = 2;
+  Log log = 3;
+  Jwt jwt = 4;
+  MQ mq = 5;
+}
+
+message Server {
+  string Mode = 1;
+  message HTTP {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  message GRPC {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  message HealthCheck {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  HTTP http = 2;
+  GRPC grpc = 3;
+  HealthCheck health_check = 4;
+}
+
+message Data {
+  message Redis {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration read_timeout = 3;
+    google.protobuf.Duration write_timeout = 4;
+  }
+  Postgres database = 1;
+  Redis redis = 2;
+}
+
+message Postgres {
+  string dsn = 1;
+  bool log_mode = 2;
+  int32 max_open_cons = 3;
+  int32 max_idle_cons = 4;
+  int32 create_batch_size = 5;
+}
+
+message MQ {
+  Kafka kafka = 1;
+}
+
+message Kafka {
+  message ProducersConfig {
+    repeated string endpoint = 1;
+    map<string, Producer> items = 2;
+  }
+  
+  message ConsumersConfig {
+    repeated string endpoint = 1;
+    map<string, Consumer> items = 2;
+  }
+  
+  ProducersConfig producers = 1;
+  ConsumersConfig consumers = 2;
+}
+
+message Producer {
+  string topic = 1;
+  int32 retries = 2;
+}
+
+message Consumer {
+  repeated string topics = 1;
+  string groupId = 2;
+  int32 concurrency = 3;
+}
+
+message Log {
+  string ServiceName = 1;
+  // 日志记录模式 console,file,volume, 默认 console
+  //   console：将日志输出到控制台。
+  //   file：将日志输出到文件。
+  //   volume：在 Kubernetes 环境中使用，将主机名添加到日志文件名中
+  string Mode = 2;
+  // 输出格式 json, plain, 默认 json
+  //   json：使用 JSON 编码。
+  //   plain：使用纯文本编码，通常在开发过程中使用。
+  string Encoding = 3;
+  // 日志文件路径
+  string Path = 4;
+  // 日志级别 debug,info,error,severe, 默认 info
+  string Level = 5;
+  // 是否压缩
+  bool Compress = 6;
+  // 是否记录统计信息，默认为 true
+  bool Stat = 7;
+  // 日志文件保留天数。默认保留所有文件。只在 Mode 为 file 或 volume 时生效，且当 Rotation 为 daily 或 size 时同时生效
+  int32 KeepDays = 8;
+  // 堆栈日志记录的冷却时间，默认为 100ms
+  int32 StackCoolDownMillis = 9;
+  // MaxBackups 表示在删除旧的备份日志文件之前，保存多少个备份日志文件。设置为 0 将永久保留所有文件。
+  // 这个参数只在 RotationRuleType 设置为 size 时生效。即使 MaxBackups 设置为0，当达到 KeepDays 限制时，日志文件仍然会被删除
+  int32 MaxBackups = 10;
+  // 表示当前正在写入的日志文件所能占用的最大空间。设置为 0 表示没有限制。单位是 MB（兆字节）。这个参数只在 Rotation 设置为 size 时生效,如果达到保留期限 KeepDays，则会删除旧文件
+  int32 MaxSize = 11;
+  // 日志轮换规则类型，默认为 daily。
+  //   daily：每天轮换。
+  //   size：按大小限制轮换。
+  string Rotation = 12;
+}
+
+message Jwt {
+  string AccessSecret = 1;
+  int64 AccessExpire = 2;
+}
