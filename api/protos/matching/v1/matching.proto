@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package api.protos.matching.v1;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "kob-kratos/api/protos/matching/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.protos.matching.v1";
+
+service matching_system {
+  // 在匹配池中添加玩家
+  rpc AddUser(User) returns (google.protobuf.Empty);
+  // 在匹配池中删除玩家
+  rpc Remove(User) returns(google.protobuf.Empty);
+}
+
+message User {
+  int32 userId = 1;
+  int32 botId = 2;
+}
+
+message AddUserResponse {
+  int32 PlayerAId = 1;
+  int32 PlayerABotId = 2;
+  int32 PlayerBId = 3;
+  int32 PlayerBBotId= 4;
+}
