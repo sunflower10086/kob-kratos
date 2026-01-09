@@ -17,6 +17,7 @@ import (
 	"kob-kratos/app/backend/internal/service/rank"
 	"kob-kratos/app/backend/internal/service/record"
 	"kob-kratos/app/backend/internal/service/user"
+	"kob-kratos/app/backend/internal/service/ws"
 )
 
 import (
@@ -49,7 +50,9 @@ func wireApp(confServer *conf.Server, confData *conf.Data, bootstrap *conf.Boots
 	botUsecase := biz.NewBotUsecase(botRepository, logger)
 	botService := bot.NewService(botUsecase, logger)
 	grpcServer := server.NewGRPCServer(confServer, service, recordService, rankService, botService, logger)
-	httpServer := server.NewHTTPServer(bootstrap, service, recordService, rankService, botService, logger)
+	hub := ws.NewHub(logger)
+	handler := server.NewWsRouter(hub, logger)
+	httpServer := server.NewHTTPServer(bootstrap, service, recordService, rankService, botService, handler, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup2()

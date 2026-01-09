@@ -2,7 +2,6 @@ package data
 
 import (
 	"context"
-	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/pkg/errors"
@@ -130,7 +129,6 @@ func (r *botRepo) Update(ctx context.Context, tx *query.Query, bot *biz.Bot) err
 		"title":       bot.Title,
 		"description": bot.Description,
 		"code":        bot.Code,
-		"updated_at":  time.Now(),
 	}
 
 	result, err := db.WithContext(ctx).Bot.

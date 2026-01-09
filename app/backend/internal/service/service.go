@@ -5,6 +5,7 @@ import (
 	"kob-kratos/app/backend/internal/service/rank"
 	"kob-kratos/app/backend/internal/service/record"
 	"kob-kratos/app/backend/internal/service/user"
+	"kob-kratos/app/backend/internal/service/ws"
 
 	"github.com/google/wire"
 )
@@ -12,7 +13,8 @@ import (
 // ProviderSet is service providers.
 var ProviderSet = wire.NewSet(
 	bot.NewService,
-	record.NewService,
 	rank.NewService,
+	record.NewService,
 	user.NewService,
+	ws.NewHub,
 )

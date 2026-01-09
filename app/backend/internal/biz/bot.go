@@ -46,7 +46,6 @@ func NewBotUsecase(repo BotRepository, logger log.Logger) *BotUsecase {
 }
 
 // AddBot 添加机器人
-// AddBot 添加机器人
 func (uc *BotUsecase) AddBot(ctx context.Context, req *v1.AddBotRequest) error {
 	bot := &Bot{
 		UserID:      int64(req.UserId),

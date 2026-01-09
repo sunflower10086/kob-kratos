@@ -11,6 +11,8 @@ import (
 	"kob-kratos/pkg/httpencoder"
 	"kob-kratos/pkg/middlewares/validate"
 
+	stdhttp "net/http"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
@@ -25,6 +27,7 @@ func NewHTTPServer(bc *conf.Bootstrap,
 	record *record.Service,
 	rank *rank.Service,
 	bot *bot.Service,
+	wsHandler stdhttp.Handler,
 	logger log.Logger,
 ) *http.Server {
 	c := bc.Server
@@ -51,6 +54,7 @@ func NewHTTPServer(bc *conf.Bootstrap,
 	opts = append(opts, http.ErrorEncoder(httpencoder.ErrorEncoder))
 
 	srv := http.NewServer(opts...)
+	srv.HandlePrefix("/", wsHandler)
 	v1.RegisterUserServiceHTTPServer(srv, user)
 	v1.RegisterRecordServiceHTTPServer(srv, record)
 	v1.RegisterRankServiceHTTPServer(srv, rank)
